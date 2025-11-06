@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend for food delivery website",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1SnoS13208/Food-Delivery-Website.git"
+  },
+  "keywords": [
+    "\"food\"",
+    "\"delivery\""
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/1SnoS13208/Food-Delivery-Website/issues"
+  },
+  "homepage": "https://github.com/1SnoS13208/Food-Delivery-Website#readme"
+}
