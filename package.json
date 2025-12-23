@@ -1,0 +1,16 @@
+{
+  "name": "food-delivery-website",
+  "version": "1.0.0",
+  "description": "Root package.json to manage full-stack installation",
+  "scripts": {
+    "install-backend": "cd backend && npm install",
+    "install-frontend": "cd frontend && npm install",
+    "install-admin": "cd admin && npm install",
+    "install-all": "npm run install-backend && npm run install-frontend && npm run install-admin",
+    "start-backend": "cd backend && npm run server",
+    "start-frontend": "cd frontend && npm run dev",
+    "start-admin": "cd admin && npm run dev"
+  },
+  "author": "",
+  "license": "ISC"
+}
