@@ -3,15 +3,16 @@
     align-items: center;
     gap: 10px;
     background: transparent;
-    border-radius: 20px;
-    padding: 5px;
-    transition: all 0.3s ease;
+    border-radius: 25px;
+    padding: 8px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .navbar-search-container.active {
-    background: #f0f0f0;
-    padding: 5px 15px;
-    border: 1px solid tomato; /* Or use variable: var(--color-primary) if defined in global, sticking to tomato here for safety matching context */
+    background: #fff;
+    padding: 8px 20px;
+    border: 1px solid tomato;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-search-input {
@@ -19,15 +20,18 @@
     outline: none;
     background: transparent;
     font-size: 16px;
-    width: 200px;
-    color: #444;
+    width: 250px;
+    color: #49557e;
+    font-weight: 500;
 }
 
-/* Override general img style slightly for this specific interactive element if needed, 
-   but it inherits well from Navbar.css */
+.navbar-search-input::placeholder {
+    color: #aaa;
+}
+
 .navbar-search-icon-btn {
     cursor: pointer;
-    transition: 0.2s;
+    transition: transform 0.2s ease;
     opacity: 0.8;
 }
 

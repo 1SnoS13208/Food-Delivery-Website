@@ -73,7 +73,7 @@ const Navbar = () => {
           }}
           className={menu === "home" ? "active" : ""}
         >
-          home
+          Home
         </Link>
 
         <a
@@ -81,7 +81,7 @@ const Navbar = () => {
           onClick={() => setMenu("menu")}
           className={menu === "menu" ? "active" : ""}
         >
-          menu
+          Menu
         </a>
 
         <a
@@ -89,7 +89,7 @@ const Navbar = () => {
           onClick={() => setMenu("mobile-app")}
           className={menu === "mobile-app" ? "active" : ""}
         >
-          mobile-app
+          Mobile App
         </a>
 
         <a
@@ -97,7 +97,7 @@ const Navbar = () => {
           onClick={() => setMenu("contact-us")}
           className={menu === "contact-us" ? "active" : ""}
         >
-          contact us
+          Contact Us
         </a>
       </ul>
 
@@ -126,6 +126,10 @@ const Navbar = () => {
         :<div className="navbar-profile">
           <img src={assets.profile_icon} alt=""/>
           <ul className="nav-profile-dropdown">
+            <li onClick={()=>navigate('/profile')}> <img src={assets.profile_icon}/><p>Profile</p></li>
+            <hr />
+            <li onClick={()=>navigate('/wishlist')}> <img src={assets.bag_icon}/><p>Wishlist</p></li>
+            <hr />
             <li onClick={()=>navigate('/myorders')}> <img src={assets.bag_icon}/><p>Order</p></li>
             <hr />
             <li onClick={logout}> <img src={assets.logout_icon}/><p>Logout</p></li>

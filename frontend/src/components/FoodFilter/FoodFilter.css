@@ -1,0 +1,81 @@
+.food-filter {
+    display: flex;
+    gap: 40px;
+    margin: 30px auto;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    padding: 20px 30px;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    width: fit-content;
+    border: 1px solid #eaeaea;
+    transition: box-shadow 0.3s ease;
+}
+
+.food-filter:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.filter-group label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #49557e;
+    letter-spacing: 0.5px;
+}
+
+.price-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #f9f9f9;
+    padding: 5px 10px;
+    border-radius: 25px;
+    border: 1px solid #e2e2e2;
+}
+
+.price-inputs input {
+    width: 70px;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 500;
+    color: #49557e;
+    outline: none;
+}
+
+.price-inputs span {
+    color: #aaa;
+    font-weight: bold;
+}
+
+.filter-group select {
+    padding: 10px 15px;
+    border: 1px solid #e2e2e2;
+    border-radius: 25px;
+    cursor: pointer;
+    background-color: #f9f9f9;
+    color: #49557e;
+    font-weight: 500;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.filter-group select:hover, .price-inputs:hover {
+    background-color: #fff;
+    border-color: tomato;
+}
+
+.price-inputs input::placeholder {
+    color: #ccc;
+}

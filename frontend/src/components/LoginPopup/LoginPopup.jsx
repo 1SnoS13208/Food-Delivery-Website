@@ -5,10 +5,12 @@ import { assets } from '../../assets/assets'
 import { useEffect } from 'react'
 import { StoreContext } from '../../context/StoreContext'
 import axios from "axios"
+import { useNavigate } from 'react-router-dom'
 
 const LoginPopup = () => {
 
     const{url,setToken, setShowLogin} = useContext(StoreContext)
+    const navigate = useNavigate();
 
     const [currState,setCurrState]= useState("Login")
     const [data,setData] = useState({
@@ -58,6 +60,8 @@ const LoginPopup = () => {
             <input name='password' onChange={onChangeHandler} value={data.password} type="password" placeholder='Password' required/>
         </div>
         
+        {currState==="Login" && <p className="forgot-password-link" onClick={() => {setShowLogin(false); navigate('/forgot-password')}}>Forgot Password?</p>}
+
         <div className="login-popup-condition">
             <input type="checkbox" required/>
             <p>I agree to the Terms of Service and Privacy Policy.</p>
@@ -66,8 +70,8 @@ const LoginPopup = () => {
         <button type='submit'>{currState==="Sign Up"?"Create Account":"Login"}</button>
 
         {currState==="Login"
-        ? <p className="login-switch">New here? <span onClick={()=>setCurrState("Sign Up")}>Create account</span></p>
-        : <p className="login-switch">Already have an account? <span onClick={()=>setCurrState("Login")}>Login here</span></p>
+        ? <p className="login-switch">New here? <span onClick={()=>setCurrState("Sign Up")}>Create Account</span></p>
+        : <p className="login-switch">Already have an account? <span onClick={()=>setCurrState("Login")}>Login Here</span></p>
         }
 
       </form>

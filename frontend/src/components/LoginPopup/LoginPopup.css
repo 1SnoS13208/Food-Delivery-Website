@@ -104,6 +104,8 @@
   margin-top: 3px;
   cursor: pointer;
   accent-color: var(--color-primary);
+  width: 20px;
+  height: 20px;
 }
 
 .login-switch {
@@ -112,13 +114,18 @@
   color: #666;
 }
 
-.login-switch span {
-  color: var(--color-primary);
-  font-weight: 600;
-  cursor: pointer;
-  margin-left: 5px;
-  text-decoration: underline;
-  text-underline-offset: 2px;
+.login-switch span{
+    font-weight: 500;
+    color: tomato;
+    cursor: pointer;
+}
+
+.forgot-password-link {
+    font-size: 14px;
+    color: tomato;
+    cursor: pointer;
+    margin-top: -10px;
+    align-self: flex-end;
 }
 
 .login-switch span:hover {

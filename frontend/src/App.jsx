@@ -15,6 +15,10 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { StoreContext } from './context/StoreContext'
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'
+import Profile from './pages/Profile/Profile'
+import Wishlist from './pages/Wishlist/Wishlist'
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword'
+import ResetPassword from './pages/ResetPassword/ResetPassword'
 
 const App = () => {
 
@@ -41,6 +45,10 @@ const App = () => {
          <Route path='/order' element={<PlaceOrder/>} />
          <Route path='/verify' element={<Verify/>} />
          <Route path='/myorders' element={<MyOrders/>} />
+         <Route path='/profile' element={<Profile/>} />
+         <Route path='/wishlist' element={<Wishlist/>} />
+         <Route path='/forgot-password' element={<ForgotPassword/>} />
+         <Route path='/reset-password/:token' element={<ResetPassword/>} />
          <Route path='/about' element={<About/>} />
          <Route path='/delivery' element={<Delivery/>} />
          <Route path='/privacy' element={<Privacy/>} />
