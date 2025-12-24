@@ -1,0 +1,229 @@
+.banners {
+    width: 100%;
+    margin: 0;
+    padding: 30px;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.banners h3 {
+    margin-bottom: 35px;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-align: center; /* Center the header */
+}
+
+.banners form {
+    background-color: var(--bg-surface);
+    padding: 35px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    align-items: center; /* Center items horizontally */
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.add-img-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center title and label */
+    width: 100%;
+}
+
+.add-img-upload p {
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Banner Upload Zone Redesign */
+.add-img-upload {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    width: 100%;
+}
+
+.upload-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 80px; /* Wider padding for banners */
+    border: 3px dashed #cbd5e1;
+    border-radius: var(--radius-lg);
+    background-color: #f8fafc;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.upload-area.has-image {
+    padding: 0;
+    border-style: solid;
+    border-color: var(--border-default);
+    width: 100%;
+    max-width: 600px;
+    height: 220px;
+}
+
+.upload-area:hover {
+    border-color: var(--color-primary);
+    background-color: #fff1f0;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.upload-area.has-image {
+    border-style: solid;
+    border-color: var(--border-default);
+}
+
+.image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Banner should fill the space */
+    background: #fff;
+}
+
+.upload-instructions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    padding: 20px;
+}
+
+.upload-circle {
+    width: 56px;
+    height: 56px;
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    margin-bottom: 5px;
+}
+
+.upload-text-main {
+    font-size: 16px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.upload-text-sub {
+    font-size: 13px;
+    color: #64748b;
+}
+
+.upload-button-mock {
+    margin-top: 5px;
+    padding: 8px 24px;
+    background-color: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.banners .add-btn {
+    width: 200px;
+    align-self: center;
+}
+
+/* Grid Gallery */
+.banner-list h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    color: var(--text-primary);
+}
+
+.banner-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+}
+
+.banner-item {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    background: #f3f4f6;
+    border: 1px solid var(--border-default);
+}
+
+.banner-item:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.banner-item img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.2s;
+}
+
+.banner-item:hover img {
+    opacity: 0.95;
+}
+
+/* Delete Overlay */
+.banner-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.banner-item:hover .banner-actions {
+    transform: translateY(0);
+}
+
+.cursor {
+    color: #ef4444;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #fee2e2;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s;
+}
+
+.cursor:hover {
+    background-color: #ef4444;
+    color: white;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}

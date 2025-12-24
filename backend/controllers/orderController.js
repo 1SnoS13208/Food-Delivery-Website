@@ -19,21 +19,21 @@ const placeOrder = async (req, res) => {
 
     const line_items = req.body.items.map((item) => ({
       price_data: {
-        currency: "inr",
+        currency: "vnd",
         product_data: {
           name: item.name,
         },
-        unit_amount: item.price * 100 * 80,
+        unit_amount: item.price * 25000,
       },
       quantity: item.quantity,
     }));
     line_items.push({
       price_data: {
-        currency: "inr",
+        currency: "vnd",
         product_data: {
           name: "Delivery Charges",
         },
-        unit_amount: 2 * 100 * 80,
+        unit_amount: 2 * 25000,
       },
       quantity: 1,
     });
@@ -101,4 +101,15 @@ const updateStatus = async(req, res) => {
   }
 }
 
-export { placeOrder, verifyOrder, userOrders,listOrder, updateStatus};
+// Mark order as read
+const markAsRead = async (req, res) => {
+    try {
+        await orderModel.findByIdAndUpdate(req.body.orderId, { isRead: true });
+        res.json({ success: true, message: "Marked as read" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error" });
+    }
+}
+
+export { placeOrder, verifyOrder, userOrders,listOrder, updateStatus, markAsRead};

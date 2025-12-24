@@ -5,8 +5,18 @@ const userSchema = new mongoose.Schema({
     email:{type:String, required:true, unique:true},
     password:{type:String, required:true},
     cartData:{type:Object, default:{}},
-
-},{minimize:false})
+    phone: {type:String, default:""},
+    address: {type:Object, default:{
+        street: "",
+        city: "",
+        state: "",
+        zipcode: "",
+        country: ""
+    }},
+        wishlist: {type:Object, default:{}},
+        resetPasswordToken: {type:String},
+        resetPasswordExpires: {type:Date}
+    },{minimize:false})
 
 const userModel = mongoose.model.user || mongoose.model("user", userSchema);
 export default userModel;

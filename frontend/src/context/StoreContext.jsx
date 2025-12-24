@@ -8,6 +8,14 @@ const StoreContextProvider = (props) => {
   const url = "http://localhost:4000";
   const [token, setToken] = useState("");
   const [food_list, setFoodList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [discount, setDiscount] = useState(0); // Percentage
+  const [couponCode, setCouponCode] = useState("");
+  const [showLogin, setShowLogin] = useState(false);
+  const [wishlist, setWishlist] = useState({});
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(100);
+  const [minRating, setMinRating] = useState(0);
 
   const addToCart = async (itemId) => {
     if (!cartItems[itemId]) {
@@ -24,6 +32,31 @@ const StoreContextProvider = (props) => {
     }
   };
 
+  const addToWishlist = async (itemId) => {
+    setWishlist((prev) => ({ ...prev, [itemId]: true }));
+    if (token) {
+      await axios.post(url + "/api/user/add-wishlist", { itemId }, { headers: { token } });
+    }
+  }
+
+  const removeFromWishlist = async (itemId) => {
+    setWishlist((prev) => {
+      const newWishlist = { ...prev };
+      delete newWishlist[itemId];
+      return newWishlist;
+    });
+    if (token) {
+      await axios.post(url + "/api/user/remove-wishlist", { itemId }, { headers: { token } });
+    }
+  }
+
+  const loadWishlist = async (token) => {
+    const response = await axios.get(url + "/api/user/get-wishlist", { headers: { token } });
+    if (response.data.success) {
+      setWishlist(response.data.wishlist);
+    }
+  }
+
   const removeFromCart = async (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
     if (token) {
@@ -35,6 +68,17 @@ const StoreContextProvider = (props) => {
     }
   };
 
+  const deleteItemFromCart = async (itemId) => {
+    setCartItems((prev) => {
+        const newCart = { ...prev };
+        delete newCart[itemId];
+        return newCart;
+    });
+    if (token) {
+        await axios.post(url + "/api/cart/delete", { itemId }, { headers: { token } });
+    }
+  }
+
   const getTotalCartAmount = () => {
     let totalAmount = 0;
     for (const item in cartItems) {
@@ -44,6 +88,14 @@ const StoreContextProvider = (props) => {
       }
     }
     return totalAmount;
+  };
+
+  const getFinalAmount = () => {
+    const total = getTotalCartAmount();
+    if (total === 0) return 0;
+    const deliveryCharge = 2;
+    const discountAmount = (total * discount) / 100;
+    return total + deliveryCharge - discountAmount;
   };
 
   const fetchFoodList = async () => {
@@ -66,6 +118,7 @@ const StoreContextProvider = (props) => {
       if (localStorage.getItem("token")) {
         setToken(localStorage.getItem("token"));
         await loadCartData(localStorage.getItem("token"));
+        await loadWishlist(localStorage.getItem("token"));
       }
     }
     loadData();
@@ -81,6 +134,22 @@ const StoreContextProvider = (props) => {
     url,
     token,
     setToken,
+    searchTerm,
+    setSearchTerm,
+    discount,
+    setDiscount,
+    getFinalAmount,
+    couponCode,
+    setCouponCode,
+    showLogin,
+    setShowLogin,
+    wishlist,
+    addToWishlist,
+    removeFromWishlist,
+    minPrice, setMinPrice,
+    maxPrice, setMaxPrice,
+    minRating, setMinRating,
+    deleteItemFromCart
   };
 
   return (

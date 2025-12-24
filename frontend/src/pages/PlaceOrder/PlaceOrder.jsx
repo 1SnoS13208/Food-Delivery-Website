@@ -4,7 +4,7 @@ import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItems, url } =
+  const { getTotalCartAmount, token, food_list, cartItems, url, discount, getFinalAmount } =
     useContext(StoreContext);
   const [data, setData] = useState({
     firstName: "",
@@ -146,8 +146,8 @@ const PlaceOrder = () => {
       </div>
       <div className="place-order-right">
         <div className="cart-total">
-          <h2>Cart Totals</h2>
-          <div>
+          <h2>Order Summary</h2>
+          <div className="summary-details">
             <div className="cart-total-details">
               <p>Subtotal</p>
               <p>${getTotalCartAmount()}</p>
@@ -157,15 +157,22 @@ const PlaceOrder = () => {
               <p>Delivery Fee</p>
               <p>${getTotalCartAmount() === 0 ? 0 : 2}</p>
             </div>
-            <hr />
-            <div className="cart-total-details">
+            {discount > 0 && (
+              <>
+                <hr />
+                <div className="cart-total-details discount">
+                  <p>Discount</p>
+                  <p>-{discount}%</p>
+                </div>
+              </>
+            )}
+            <hr className="total-divider" />
+            <div className="cart-total-details total">
               <b>Total</b>
-              <b>
-                ${getTotalCartAmount() === 0 ? 0 : getTotalCartAmount() + 2}
-              </b>
+              <b>${getFinalAmount()}</b>
             </div>
           </div>
-          <button type="submit">PROCEED TO PAYMENT</button>
+          <button type="submit" className="payment-btn">PROCEED TO PAYMENT</button>
         </div>
       </div>
     </form>

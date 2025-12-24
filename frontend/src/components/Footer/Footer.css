@@ -28,6 +28,11 @@
   font-size: 15px;
 }
 
+.footer-logo {
+    width: 150px;
+    margin-bottom: -10px; /* Slight adjustment to spacing */
+}
+
 .footer-content-center h2, .footer-content-right h2 {
   color: white;
   font-size: 20px;
