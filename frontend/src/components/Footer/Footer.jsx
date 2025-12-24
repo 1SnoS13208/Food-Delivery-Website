@@ -11,7 +11,7 @@ const Footer = () => {
             <div className='footer-content'>
 
                 <div className="footer-content-left" data-aos="fade-up">
-                    <img src={assets.logo} alt="" />
+                    <img src={assets.logo} alt="" className='footer-logo' />
                     <p> Welcome to our website! We are passionate about providing fresh, delicious meals straight to your doorstep. Our mission is to combine convenience with exceptional taste, ensuring every order delights our customers. We value quality, reliability, and your satisfaction above all</p>
                     
                     <div className="footer-social-icon">

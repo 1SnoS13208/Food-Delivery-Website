@@ -1,29 +1,51 @@
 import orderModel from "../models/orderModel.js";
-import foodModel from "../models/foodModel.js";
 import userModel from "../models/userModel.js";
+import foodModel from "../models/foodModel.js";
 
 const getDashboardStats = async (req, res) => {
     try {
         const totalOrders = await orderModel.countDocuments({});
-        const totalFoodItems = await foodModel.countDocuments({});
         const totalUsers = await userModel.countDocuments({});
-        
-        const orders = await orderModel.find({});
-        const totalRevenue = orders.reduce((acc, curr) => acc + curr.amount, 0);
+        const totalFoodItems = await foodModel.countDocuments({});
 
-        // Simple recent orders
-        const recentOrders = await orderModel.find({}).sort({date: -1}).limit(5);
+        const orders = await orderModel.find({});
+        const totalRevenue = orders.reduce((acc, order) => {
+            return acc + (order.payment ? order.amount : 0);
+        }, 0);
+
+        // Calculate sales over time (last 7 days logic - simplified for now to just return list)
+        // For a real chart, we'd group by date.
+        
+        // Find top selling items
+        // This requires parsing 'items' array in orders. 
+        let itemSales = {};
+        orders.forEach(order => {
+            order.items.forEach(item => {
+                if (itemSales[item.name]) {
+                    itemSales[item.name] += item.quantity;
+                } else {
+                    itemSales[item.name] = item.quantity;
+                }
+            });
+        });
+
+        const topItems = Object.entries(itemSales)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([name, count]) => ({ name, count }));
+
 
         res.json({
             success: true,
             data: {
                 totalOrders,
-                totalFoodItems,
                 totalUsers,
+                totalFoodItems,
                 totalRevenue,
-                recentOrders
+                topItems
             }
         });
+
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: "Error" });

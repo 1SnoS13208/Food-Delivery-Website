@@ -11,8 +11,9 @@
 }
 
 .navbar .logo {
-  width: 140px;
+  width: 120px; 
   transition: var(--transition-smooth);
+  object-fit: contain;
 }
 
 .navbar-menu {

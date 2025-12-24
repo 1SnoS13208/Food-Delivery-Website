@@ -1,36 +1,48 @@
 import React, { useState, useEffect } from 'react'
 import './Header.css'
+import axios from 'axios'
 
 const Header = () => {
-    // Array of background images. 
-    // To add more, put images in 'frontend/public' and add their filenames here.
-    const backgrounds = [
-        '/header_img.png', 
-        '/banner_2.png', // Duplicate for demo. Replace with e.g., '/hero_2.png'
-        '/banner_3.png'  // Duplicate for demo. Replace with e.g., '/hero_3.png'
-    ];
-
+    const [banners, setBanners] = useState(['/header_img.png']); // Default fallback
     const [currentBg, setCurrentBg] = useState(0);
+    const url = "http://localhost:4000";
+
+    const fetchBanners = async () => {
+        try {
+            const response = await axios.get(`${url}/api/banner/list`);
+            if (response.data.success && response.data.data.length > 0) {
+                // Map backend images to full URLs
+                const bannerImages = response.data.data.map(item => `${url}/images/${item.image}`);
+                setBanners(bannerImages);
+            }
+        } catch (error) {
+            console.error("Error fetching banners:", error);
+        }
+    }
+
+    useEffect(() => {
+        fetchBanners();
+    }, []);
 
     const nextSlide = () => {
-        setCurrentBg((prev) => (prev + 1) % backgrounds.length);
+        setCurrentBg((prev) => (prev + 1) % banners.length);
     };
 
     const prevSlide = () => {
-        setCurrentBg((prev) => (prev === 0 ? backgrounds.length - 1 : prev - 1));
+        setCurrentBg((prev) => (prev === 0 ? banners.length - 1 : prev - 1));
     };
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentBg((prev) => (prev + 1) % backgrounds.length);
+            setCurrentBg((prev) => (prev + 1) % banners.length);
         }, 5000); // Change every 5 seconds
 
         return () => clearInterval(interval);
-    }, [backgrounds.length]);
+    }, [banners.length]);
 
   return (
     <div className='header' data-aos="zoom-in" data-aos-duration="1500">
-      {backgrounds.map((bg, index) => (
+      {banners.map((bg, index) => (
         <div 
           key={index}
           className={`header-slide ${index === currentBg ? 'active' : ''}`}

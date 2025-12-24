@@ -9,6 +9,9 @@ import orderRouter from "./routes/orderRoute.js"
 import couponRouter from "./routes/couponRoute.js"
 import reviewRouter from "./routes/reviewRoute.js"
 import dashboardRouter from "./routes/dashboardRoute.js"
+import bannerRouter from "./routes/bannerRoute.js"
+import categoryRouter from "./routes/categoryRoute.js"
+import settingsRouter from "./routes/settingsRoute.js"
 
 // app config
 const app = express()
@@ -30,6 +33,9 @@ app.use("/api/order",orderRouter)
 app.use("/api/coupon",couponRouter)
 app.use("/api/review",reviewRouter)
 app.use("/api/dashboard",dashboardRouter)
+app.use("/api/banner",bannerRouter)
+app.use("/api/category",categoryRouter)
+app.use("/api/settings",settingsRouter)
 
 app.get("/",(req,res)=>{
   res.send("API Working hehehehe");

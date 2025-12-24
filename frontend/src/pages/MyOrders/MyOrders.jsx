@@ -31,7 +31,7 @@ const MyOrders = () => {
     }, [token])
 
     const getStatusStep = (status) => {
-        const steps = ["Food Processing", "Out for delivery", "Delivered"];
+        const steps = ["Pending", "Confirmed", "Food Processing", "Out for delivery", "Delivered"];
         const index = steps.indexOf(status);
         return index === -1 ? 0 : index + 1;
     }
@@ -65,16 +65,26 @@ const MyOrders = () => {
                             <div className="order-tracker">
                                 <div className={`step ${currentStep >= 1 ? 'active' : ''}`}>
                                     <div className="step-circle">1</div>
-                                    <span>Processing</span>
+                                    <span>Pending</span>
                                 </div>
                                 <div className={`line ${currentStep >= 2 ? 'active' : ''}`}></div>
                                 <div className={`step ${currentStep >= 2 ? 'active' : ''}`}>
                                     <div className="step-circle">2</div>
-                                    <span>Out for Delivery</span>
+                                    <span>Confirmed</span>
                                 </div>
                                 <div className={`line ${currentStep >= 3 ? 'active' : ''}`}></div>
                                 <div className={`step ${currentStep >= 3 ? 'active' : ''}`}>
                                     <div className="step-circle">3</div>
+                                    <span>Processing</span>
+                                </div>
+                                <div className={`line ${currentStep >= 4 ? 'active' : ''}`}></div>
+                                <div className={`step ${currentStep >= 4 ? 'active' : ''}`}>
+                                    <div className="step-circle">4</div>
+                                    <span>On Way</span>
+                                </div>
+                                <div className={`line ${currentStep >= 5 ? 'active' : ''}`}></div>
+                                <div className={`step ${currentStep >= 5 ? 'active' : ''}`}>
+                                    <div className="step-circle">5</div>
                                     <span>Delivered</span>
                                 </div>
                             </div>

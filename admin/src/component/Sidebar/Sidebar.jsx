@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'
 
 const Sidebar = () => {
   return (
-    <div className='sidebar' data-aos="fade-right">
+    <div className='sidebar'>
       <div className="sidebar-options">
         <NavLink to='/' className="sidebar-option">
             <img src={assets.order_icon} alt="" />
@@ -26,6 +26,18 @@ const Sidebar = () => {
         <NavLink to='/coupons' className="sidebar-option">
             <img src={assets.add_icon} alt="" />
             <p>Coupons</p>
+        </NavLink>
+        <NavLink to='/banners' className="sidebar-option">
+            <img src={assets.order_icon} alt="" />
+            <p>Banners</p>
+        </NavLink>
+        <NavLink to='/category' className="sidebar-option">
+            <img src={assets.add_icon} alt="" />
+            <p>Categories</p>
+        </NavLink>
+        <NavLink to='/settings' className="sidebar-option">
+            <img src={assets.order_icon} alt="" />
+            <p>Settings</p>
         </NavLink>
       </div>
     </div>

@@ -1,33 +1,28 @@
 .sidebar {
-  width: 15%; /* Reduced width */
+  width: 15%; /* Reduced from 18% */
   min-height: 100vh;
   background-color: var(--bg-surface);
   border-right: 1px solid var(--border-default);
-  font-size: 15px; /* Slightly smaller font */
-  display: flex;
-  flex-direction: column;
+  padding-top: 20px;
+  font-size: 14px;
 }
 
 .sidebar-options {
-  padding-top: 40px; /* Reduced padding */
-  padding-left: 0;
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Reduced gap */
-  width: 100%;
+  gap: 8px; 
 }
 
 .sidebar-option {
   display: flex;
   align-items: center;
-  gap: 12px; /* Reduced gap */
-  padding: 10px 18px; /* Reduced padding */
-  margin: 0 10px; /* Reduced side margins */
-  border: 1px solid transparent;
-  border-radius: var(--radius-md);
+  gap: 15px;
+  padding: 12px 25px;
   cursor: pointer;
-  transition: var(--transition-smooth);
   color: var(--text-secondary);
+  border-right: 4px solid transparent;
+  transition: all 0.2s ease;
+  margin-bottom: 2px;
 }
 
 .sidebar-option:hover {
@@ -36,25 +31,42 @@
 }
 
 .sidebar-option.active {
-  background-color: var(--color-primary-soft);
-  border-color: var(--color-primary-soft);
+  background-color: #fff0ed;
   color: var(--color-primary);
+  border-right-color: var(--color-primary);
   font-weight: 500;
 }
 
 .sidebar-option img {
-  width: 22px; /* Slightly smaller icons */
-  height: 22px;
+  width: 20px;
+  height: 20px;
   object-fit: contain;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.sidebar-option.active img {
+    opacity: 1;
 }
 
 @media (max-width: 900px) {
+  .sidebar {
+    width: 80px;
+  }
   .sidebar-option p {
     display: none;
   }
-  
   .sidebar-option {
     justify-content: center;
-    padding: 10px; /* Adjusted padding */
+    padding: 15px 0;
+    margin: 0 10px;
+    border-right: none;
+    border-bottom: 3px solid transparent;
+    border-radius: 8px;
+  }
+  
+  .sidebar-option.active {
+      border-bottom-color: var(--color-primary);
+      border-right-color: transparent;
   }
 }

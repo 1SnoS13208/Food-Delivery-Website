@@ -58,4 +58,17 @@ const removeFood = async (req, res) => {
     res.json({ success: false, message: "Error" });
   }
 };
-export { addFood, listFood, removeFood };
+// toggle food availability
+const toggleAvailability = async (req, res) => {
+    try {
+        const food = await foodModel.findById(req.body.id);
+        food.available = !food.available;
+        await food.save();
+        res.json({ success: true, message: "Availability Updated" });
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: "Error" });
+    }
+}
+
+export { addFood, listFood, removeFood, toggleAvailability };
