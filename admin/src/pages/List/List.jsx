@@ -63,7 +63,7 @@ const List = ({url}) => {
                 <img src={item.image.startsWith("http") ? item.image : `${url}/images/`+item.image} alt=""/>
                 <p>{item.name}</p>
                 <p>{item.category}</p>
-                <p>${item.price}</p>
+                <p>{item.price.toLocaleString()} ₫</p>
                 <div className={`stock-toggle ${item.available ? 'available' : 'unavailable'}`} onClick={() => toggleAvailability(item._id)}>
                     {item.available ? 'In Stock' : 'Sold Out'}
                 </div>

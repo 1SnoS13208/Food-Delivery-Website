@@ -109,7 +109,7 @@ const Navbar = ({url, setToken}) => {
                                         <div className="notif-content">
                                             <p className="notif-title">New Order #{order._id.slice(-4)}</p>
                                             <p className="notif-desc">
-                                                {order.items.length} items • ${order.amount}
+                                                {order.items.length} items • {order.amount.toLocaleString()} ₫
                                             </p>
                                             <p className="notif-time">
                                                 {new Date(order.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

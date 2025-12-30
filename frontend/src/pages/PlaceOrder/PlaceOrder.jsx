@@ -4,8 +4,13 @@ import { StoreContext } from "../../context/StoreContext";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const PlaceOrder = () => {
-  const { getTotalCartAmount, token, food_list, cartItems, url, discount, getFinalAmount } =
+  const { getTotalCartAmount, token, food_list, cartItems, url, discount, getFinalAmount, settings } =
     useContext(StoreContext);
+  
+  const [deliveryFee, setDeliveryFee] = useState(settings.deliveryFee);
+  const [loadingFee, setLoadingFee] = useState(false);
+  const [quotationId, setQuotationId] = useState("");
+
   const [data, setData] = useState({
     firstName: "",
     lastName: "",
@@ -17,26 +22,66 @@ const PlaceOrder = () => {
     country: "",
     phone: "",
   });
+
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
     setData((data) => ({ ...data, [name]: value }));
   };
+
+  // Hàm tính phí giao hàng từ API
+  const fetchDeliveryFee = async () => {
+    if (data.street && data.city) {
+      setLoadingFee(true);
+      try {
+        const pickupAddress = "Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội"; // Địa chỉ HUST
+        const response = await axios.post(url + "/api/delivery/estimate", {
+          pickup: pickupAddress,
+          dropoff: `${data.street}, ${data.city}`
+        }, { headers: { token } });
+
+        if (response.data.success) {
+          // Lalamove trả về giá tiền trong response.data.data.totalAmount
+          const amount = parseFloat(response.data.data.data.totalAmount);
+          setDeliveryFee(amount);
+          setQuotationId(response.data.data.data.quotationId);
+        }
+      } catch (error) {
+        console.error("Error fetching delivery fee:", error);
+      } finally {
+        setLoadingFee(false);
+      }
+    }
+  };
+
+  // Tự động tính lại phí khi người dùng ngừng nhập địa chỉ (sau 2 giây)
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchDeliveryFee();
+    }, 2000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [data.street, data.city]);
+
   const placeOrder = async (event) => {
     event.preventDefault();
     let orderItems = [];
     food_list.map((item) => {
       if (cartItems[item._id] > 0) {
-        let itemInfo = item;
+        let itemInfo = { ...item };
         itemInfo["quantity"] = cartItems[item._id];
         orderItems.push(itemInfo);
       }
     });
+
     let orderData = {
       address: data,
       items: orderItems,
-      amount: getTotalCartAmount() + 2,
+      amount: getTotalCartAmount() + deliveryFee - (getTotalCartAmount() * discount / 100),
+      deliveryFee: deliveryFee,
+      quotationId: quotationId
     };
+
     let response = await axios.post(url + "/api/order/place", orderData, {
       headers: { token },
     });
@@ -44,7 +89,7 @@ const PlaceOrder = () => {
       const { session_url } = response.data;
       window.location.replace(session_url);
     } else {
-      alert("Error");
+      alert("Error placing order");
     }
   };
   
@@ -150,12 +195,12 @@ const PlaceOrder = () => {
           <div className="summary-details">
             <div className="cart-total-details">
               <p>Subtotal</p>
-              <p>${getTotalCartAmount()}</p>
+              <p>{getTotalCartAmount().toLocaleString()} ₫</p>
             </div>
             <hr />
             <div className="cart-total-details">
               <p>Delivery Fee</p>
-              <p>${getTotalCartAmount() === 0 ? 0 : 2}</p>
+              <p>{loadingFee ? "Calculating..." : `${deliveryFee.toLocaleString()} ₫`}</p>
             </div>
             {discount > 0 && (
               <>
@@ -169,10 +214,12 @@ const PlaceOrder = () => {
             <hr className="total-divider" />
             <div className="cart-total-details total">
               <b>Total</b>
-              <b>${getFinalAmount()}</b>
+              <b>{getTotalCartAmount() === 0 ? 0 : (getTotalCartAmount() + deliveryFee - (getTotalCartAmount() * discount / 100)).toLocaleString()} ₫</b>
             </div>
           </div>
-          <button type="submit" className="payment-btn">PROCEED TO PAYMENT</button>
+          <button type="submit" disabled={loadingFee} className="payment-btn">
+            {loadingFee ? "WAITING FOR FEE..." : "PROCEED TO PAYMENT"}
+          </button>
         </div>
       </div>
     </form>

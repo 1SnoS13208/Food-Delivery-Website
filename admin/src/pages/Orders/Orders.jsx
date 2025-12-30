@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Orders.css";
-import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { assets } from "../../assets/assets";
-import { Package } from "lucide-react";
+import { Package, Truck } from "lucide-react"; // Added Truck icon
 
 const Orders = ({ url }) => {
   const [orders, setOrders] = useState([]);
+  const [loadingDelivery, setLoadingDelivery] = useState(false); // Loading state for delivery request
 
   const fetchAllOrder = async () => {
     const token = localStorage.getItem("token");
+    if (!token) return;
     const response = await axios.get(url + "/api/order/list", {headers: {token}});
     if (response.data.success) {
-      setOrders(response.data.data.reverse()); // Show newest first
+      setOrders(response.data.data.reverse());
     } else {
       toast.error("Error fetching orders");
     }
@@ -25,7 +25,7 @@ const Orders = ({ url }) => {
     
     if (newStatus === "Cancelled") {
         reason = prompt("Please enter a reason for cancellation:", "Out of stock");
-        if (reason === null) return; // Cancelled the prompt
+        if (reason === null) return; 
     }
 
     const token = localStorage.getItem("token");
@@ -39,6 +39,82 @@ const Orders = ({ url }) => {
       toast.success("Order status updated");
     }
   };
+
+  // --- LALAMOVE INTEGRATION ---
+  const handleLalamoveRequest = async (order) => {
+    if (!window.confirm("Bạn có chắc muốn gọi tài xế Lalamove cho đơn hàng này?")) return;
+
+    setLoadingDelivery(true);
+    const token = localStorage.getItem("token");
+
+    try {
+        // 1. Địa chỉ cửa hàng (Hardcode để test - Đổi sang Hà Nội cho gần khách hàng)
+        const pickupAddress = "Vincom Center Ba Trieu, Hai Ba Trung, Hanoi"; 
+        
+        // 2. Địa chỉ khách hàng
+        const dropoffAddress = `${order.address.street}, ${order.address.city}, ${order.address.state}, ${order.address.zipcode}`;
+
+        toast.info("Đang lấy báo giá vận chuyển...");
+
+        // Bước 1: Lấy báo giá (Estimate)
+        const estimateRes = await axios.post(url + "/api/delivery/estimate", {
+            pickup: pickupAddress,
+            dropoff: dropoffAddress
+        }, { headers: { token } });
+
+        console.log("Lalamove Response:", estimateRes.data); // Xem log này trên Browser Console (F12)
+
+        if (!estimateRes.data.success) {
+            throw new Error(estimateRes.data.message || "Không lấy được báo giá");
+        }
+
+        // Backend trả về: { success: true, data: { ...LalamoveData... } }
+        // Lalamove Data có thể nằm trong estimateRes.data.data.data hoặc estimateRes.data.data
+        const quoteData = estimateRes.data.data.data || estimateRes.data.data; 
+
+        if (!quoteData || !quoteData.priceBreakdown) {
+             console.error("Cấu trúc JSON lạ:", quoteData);
+             throw new Error("Dữ liệu báo giá không hợp lệ");
+        }
+
+        const quotationId = quoteData.quotationId;
+        const shippingFee = quoteData.priceBreakdown.total;
+
+        // Hỏi lại Admin lần nữa về giá
+        if (!window.confirm(`Phí ship ước tính là: ${shippingFee} VND. Đồng ý đặt xe?`)) {
+             setLoadingDelivery(false);
+             return;
+        }
+
+        toast.info("Đang tìm tài xế...");
+
+        // Bước 2: Tạo đơn hàng (Place Order)
+        // Gửi toàn bộ quoteData (chứa stops và stopId) sang backend
+        const createRes = await axios.post(url + "/api/delivery/create", {
+            orderId: order._id,
+            quotation: quoteData 
+        }, { headers: { token } });
+
+        if (createRes.data.success) {
+            toast.success("✅ Đã gọi xe thành công! Mã đơn: " + createRes.data.data.orderId);
+            // Có thể cập nhật trạng thái đơn hàng sang "Out for delivery" luôn
+            await axios.post(url + "/api/order/status", {
+                orderId: order._id,
+                status: "Out for delivery"
+            }, {headers: {token}});
+            await fetchAllOrder();
+        } else {
+             throw new Error(createRes.data.message || "Lỗi khi tạo đơn giao hàng");
+        }
+
+    } catch (error) {
+        console.error(error);
+        toast.error("Lỗi gọi xe: " + (error.response?.data?.message || error.message));
+    } finally {
+        setLoadingDelivery(false);
+    }
+  };
+  // -----------------------------
 
   useEffect(() => {
     fetchAllOrder();
@@ -93,24 +169,59 @@ const Orders = ({ url }) => {
                 </div>
                 <div className="summary-item">
                   <span>Total</span>
-                  <b className="price">${order.amount}</b>
+                  <b className="price">{order.amount.toLocaleString()} ₫</b>
                 </div>
               </div>
               
-              <div className="order-status-control">
-                <label>Status:</label>
-                <select
-                  onChange={(event) => statusHandler(event, order._id)}
-                  value={order.status}
-                  className={`status-select ${order.status.toLowerCase().replace(/\s/g, '-')}`}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Confirmed">Confirmed</option>
-                  <option value="Food Processing">Processing</option>
-                  <option value="Out for delivery">Out for Delivery</option>
-                  <option value="Delivered">Delivered</option>
-                  <option value="Cancelled">Cancelled</option>
-                </select>
+              <div className="order-controls">
+                  {/* Hiển thị thông tin vận chuyển nếu đã gọi xe */}
+                  {order.deliveryId && (
+                      <div className="delivery-info" style={{fontSize: '12px', color: '#666', marginBottom: '5px'}}>
+                          <p>🚚 Lalamove ID: <b>{order.deliveryId}</b></p>
+                          <p>Status: {order.deliveryStatus || "Processing"}</p>
+                      </div>
+                  )}
+
+                  <div className="order-status-control">
+                    <select
+                      onChange={(event) => statusHandler(event, order._id)}
+                      value={order.status}
+                      className={`status-select ${order.status.toLowerCase().replace(/\s/g, '-')}`}
+                    >
+                      <option value="Pending">Pending</option>
+                      <option value="Confirmed">Confirmed</option>
+                      <option value="Food Processing">Processing</option>
+                      <option value="Out for delivery">Out for Delivery</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
+                    </select>
+                  </div>
+                  
+                  {/* Nút gọi Lalamove chỉ hiện khi đơn chưa hoàn thành VÀ chưa gọi xe */}
+                  {order.status !== 'Delivered' && order.status !== 'Cancelled' && !order.deliveryId && (
+                      <button 
+                        className="btn-lalamove"
+                        onClick={() => handleLalamoveRequest(order)}
+                        disabled={loadingDelivery}
+                        style={{
+                            marginTop: '10px',
+                            padding: '8px 12px',
+                            backgroundColor: '#ff6600', /* Lalamove Orange */
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '5px',
+                            width: '100%',
+                            justifyContent: 'center'
+                        }}
+                      >
+                         <Truck size={16} /> 
+                         {loadingDelivery ? "Đang xử lý..." : "Gọi Lalamove"}
+                      </button>
+                  )}
               </div>
             </div>
           </div>

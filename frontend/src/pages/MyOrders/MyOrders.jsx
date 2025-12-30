@@ -79,7 +79,7 @@ const MyOrders = () => {
                             </div>
                             
                             <div className="order-details-grid">
-                                <p className="price">${order.amount}.00</p>
+                                <p className="price">{order.amount.toLocaleString()} ₫</p>
                                 <p>Items: {order.items.length}</p>
                             </div>
 
