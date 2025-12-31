@@ -77,6 +77,7 @@ const createDelivery = async (req, res) => {
         
         order.deliveryId = lalamoveOrderId;
         order.deliveryStatus = "ASSIGNING_DRIVER";
+        order.status = "Finding Driver";
         await order.save();
 
         res.json({ 
@@ -104,7 +105,7 @@ const getDeliveryStatus = async (req, res) => {
 
         if (orderId && lalamoveStatus) {
             // Map Lalamove status to System status
-            let myStatus = "Processing";
+            let myStatus = "Food Processing";
             if (lalamoveStatus === "ASSIGNING_DRIVER") myStatus = "Finding Driver";
             if (lalamoveStatus === "ON_GOING") myStatus = "Out for delivery";
             if (lalamoveStatus === "PICKED_UP") myStatus = "Out for delivery";

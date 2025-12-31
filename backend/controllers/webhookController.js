@@ -16,7 +16,7 @@ const handleWebhook = async (req, res) => {
              const { orderId, status } = data;
              
              // Map Lalamove status to your system's status
-             let myStatus = "Processing";
+             let myStatus = "Food Processing";
              if (status === "ASSIGNING_DRIVER") myStatus = "Finding Driver";
              if (status === "ON_GOING") myStatus = "Out for delivery";
              if (status === "COMPLETED") myStatus = "Delivered";
