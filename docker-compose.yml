@@ -1,5 +1,4 @@
 # BKFood Delivery Website - Docker Compose
-version: '3.8'
 
 services:
   # Backend API
@@ -10,8 +9,12 @@ services:
       - "4000:4000"
     environment:
       - NODE_ENV=production
-    env_file:
-      - ./backend/.env
+      # Add your environment variables directly here if .env doesn't exist
+      # Or create backend/.env file with your actual values
+      - MONGO_URI=${MONGO_URI:-mongodb://localhost:27017/bkfood}
+      - JWT_SECRET=${JWT_SECRET:-your_jwt_secret}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY:-}
+      - MISTRAL_API_KEY=${MISTRAL_API_KEY:-}
     volumes:
       - ./backend/uploads:/app/uploads
     restart: unless-stopped
