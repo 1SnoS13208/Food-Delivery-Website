@@ -1,5 +1,4 @@
 # BKFood Delivery Website - Docker Compose
-version: '3.8'
 
 services:
   # Backend API
@@ -8,10 +7,10 @@ services:
     container_name: bkfood-backend
     ports:
       - "4000:4000"
-    environment:
-      - NODE_ENV=production
     env_file:
       - ./backend/.env
+    environment:
+      - NODE_ENV=production
     volumes:
       - ./backend/uploads:/app/uploads
     restart: unless-stopped
