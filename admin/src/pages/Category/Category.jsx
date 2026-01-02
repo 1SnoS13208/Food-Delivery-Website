@@ -103,7 +103,7 @@ const Category = ({url}) => {
                     {categories.map((item, index) => {
                         return (
                             <div key={index} className="category-table-row">
-                                <img src={`${url}/images/${item.image}`} alt="" />
+                                <img src={item.image} alt="" />
                                 <p>{item.name}</p>
                                 <p onClick={() => removeCategory(item._id)} className='cursor'>
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
